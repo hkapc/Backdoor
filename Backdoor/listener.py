@@ -60,5 +60,5 @@ class SocketListener:
             print(command_output)
 
 
-my_socket_listener = SocketListener("192.168.1.89", 8080)
+my_socket_listener = SocketListener("ip", 8080)
 my_socket_listener.start_listener()
